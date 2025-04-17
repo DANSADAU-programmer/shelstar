@@ -22,7 +22,14 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        
+        'phone_number', // Add phone number
+        'bio',          // Add bio
+        'profile_picture', // Add profile picture
+        'location',     // Add location
+        'website',      // Add website
+        'date_of_birth', // Add date of birth
+        'gender',       // Add gender
+        'settings',     // Add settings (for JSON storage)
     ];
 
     /**
@@ -43,5 +50,6 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'settings' => 'array', // Cast 'settings' column to an array
     ];
 }
