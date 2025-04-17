@@ -27,10 +27,13 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
 // Protected routes (require authentication via Sanctum)
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-    Route::get('/user', [AuthController::class, 'user'])->name('user'); // Example protected route to get user data
+    Route::get('/user', [AuthController::class, 'user'])->name('user');
     Route::get('/profile', [UserProfileController::class, 'getProfile'])->name('profile.get');
     Route::put('/profile', [UserProfileController::class, 'updateProfile'])->name('profile.update');
     Route::put('/settings', [UserProfileController::class, 'updateSettings'])->name('settings.update');
+    Route::get('/', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::put('/{id}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
+    Route::put('/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
     // Potentially a separate route for password update if not handled by Fortify UI
     // Route::put('/password', [UserProfileController::class, 'updatePassword'])->name('password.update');
 });
