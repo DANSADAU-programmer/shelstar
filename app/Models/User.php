@@ -8,6 +8,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class User extends Authenticatable
 {
@@ -52,4 +54,14 @@ class User extends Authenticatable
         'password' => 'hashed',
         'settings' => 'array', // Cast 'settings' column to an array
     ];
+}
+
+public function conversationsWithAgents(): MorphToMany
+{
+    return $this->morphToMany(Agent::class, 'user', 'conversations');
+}
+
+public function messages(): MorphMany
+{
+    return $this->morphMany(Message::class, 'sender');
 }

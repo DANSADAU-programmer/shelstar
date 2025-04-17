@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MessageController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -36,4 +37,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
     // Potentially a separate route for password update if not handled by Fortify UI
     // Route::put('/password', [UserProfileController::class, 'updatePassword'])->name('password.update');
+});
+
+Route::prefix('conversations')->group(function () {
+    Route::get('/', [MessageController::class, 'index'])->name('conversations.index'); // Get user's conversations
+    Route::get('/{conversation}', [MessageController::class, 'show'])->name('conversations.show'); // Get messages in a conversation
+    Route::post('/{agent}', [MessageController::class, 'store'])->name('conversations.store'); // Start a new conversation or send a message
+    Route::put('/{conversation}/read', [MessageController::class, 'markAsRead'])->name('conversations.read'); // Mark messages as read
 });
