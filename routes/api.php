@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\KYCController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,4 +50,9 @@ Route::prefix('conversations')->group(function () {
     Route::get('/{conversation}', [MessageController::class, 'show'])->name('conversations.show'); // Get messages in a conversation
     Route::post('/{agent}', [MessageController::class, 'store'])->name('conversations.store'); // Start a new conversation or send a message
     Route::put('/{conversation}/read', [MessageController::class, 'markAsRead'])->name('conversations.read'); // Mark messages as read
+});
+Route::prefix('kyc')->group(function () {
+    Route::post('/submit', [KYCController::class, 'submit'])->name('kyc.submit');
+    Route::get('/status', [KYCController::class, 'status'])->name('kyc.status');
+    Route::get('/documents', [KYCController::class, 'getDocuments'])->name('kyc.documents'); // If using separate table
 });

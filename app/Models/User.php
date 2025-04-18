@@ -10,6 +10,9 @@ use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany; // If using separate documents table
+
 
 class User extends Authenticatable
 {
@@ -25,13 +28,13 @@ class User extends Authenticatable
         'email',
         'password',
         'phone_number', // Add phone number
-        'bio',          // Add bio
+        'bio',           // Add bio
         'profile_picture', // Add profile picture
-        'location',     // Add location
-        'website',      // Add website
+        'location',      // Add location
+        'website',       // Add website
         'date_of_birth', // Add date of birth
-        'gender',       // Add gender
-        'settings',     // Add settings (for JSON storage)
+        'gender',        // Add gender
+        'settings',      // Add settings (for JSON storage)
     ];
 
     /**
@@ -54,14 +57,25 @@ class User extends Authenticatable
         'password' => 'hashed',
         'settings' => 'array', // Cast 'settings' column to an array
     ];
-}
 
-public function conversationsWithAgents(): MorphToMany
-{
-    return $this->morphToMany(Agent::class, 'user', 'conversations');
-}
+    public function conversationsWithAgents(): MorphToMany
+    {
+        return $this->morphToMany(Agent::class, 'user', 'conversations');
+    }
 
-public function messages(): MorphMany
-{
-    return $this->morphMany(Message::class, 'sender');
+    public function messages(): MorphMany
+    {
+        return $this->morphMany(Message::class, 'sender');
+    }
+
+    public function kycSubmission(): HasOne
+    {
+        return $this->hasOne(KYCSubmission::class);
+    }
+
+    // If using separate kyc_documents table
+    public function kycDocuments(): HasMany
+    {
+        return $this->hasManyThrough(KYCDocument::class, KYCSubmission::class);
+    }
 }
